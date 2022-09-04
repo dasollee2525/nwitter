@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { dbService } from "fbase";
-import { addDoc, collection,onSnapshot, query, orderBy } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import Nweet from "components/Nweet"
 
 const Home = ({ userObj }) => {
     const [nweet, setNweet] = useState("");
@@ -12,6 +13,7 @@ const Home = ({ userObj }) => {
                 ...doc.data(),
             }));
             setNweets(nweetArr);
+            console.log(nweets)
         });
     }, []);
     const onSubmit = async (event) => {
@@ -28,7 +30,9 @@ const Home = ({ userObj }) => {
             target:{value},
         } = event;
         setNweet(value);
+        console.log(value);
     };
+    console.log(nweets)
     return (
         <div>
             <form onSubmit={onSubmit}>
@@ -43,9 +47,7 @@ const Home = ({ userObj }) => {
             </form>
             <div>
                 {nweets.map((nweet) => (
-                    <div key={nweet.id}>
-                        <h4>{nweet.text}</h4>
-                    </div>
+                    <Nweet key={nweet.id} nweetObj={nweet} isOwner={nweet.creatorId === userObj.uid}/>
                 ))}
             </div>
         </div>
